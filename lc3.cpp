@@ -57,44 +57,63 @@ private:
 
 public:
 
+    uint16_t signExtend(uint16_t imm, int bit_count){
+
+
+}
+
+    void updateFlag(){}
+
     int fetchInstruction(){
     std::cout<<"\nFetched"<<registers[reg_PC];
     return memory[registers[reg_PC]++]; //Returns the next instruction after incrementing the program counter.
     }
     void decodeInstruction(uint16_t instr){
     uint16_t opcode = instr >> 12; //Extracting opcode from the instruction
-            switch (opcode)
-            {
-                case ADD: {
+            switch (opcode) {
+                case ADD:
+                {
                     uint16_t r0 = (instr >> 9) & 0x7; //Extract Destination Register by shifting and masking.
-                    uint16_t r1 = (instr >> 6)& 0x7; //Extract first operand by shifting and masking.
+                    uint16_t r1 = (instr >> 6) & 0x7; //Extract first operand by shifting and masking.
 
-                    if(((instr >> 5) & 0x1)){ //Immediate Mode (Should I make a flag variable here?
-                        //Write Later
-                    }
-                    else{
+                    if (((instr >> 5) & 0x1)) { //Immediate Mode (Make Flag Variable)
+                        //Write Later, Sign Extend
+                    } else {
                         uint16_t r2 = instr & 0x7; //Second Operand
                         registers[r0] = registers[r1] + registers[r2];
                     }
                     //Update Flag
                 }
                     break;
-                case AND: {
+                case AND:
+                {
                     uint16_t r0 = (instr >> 9) & 0x7;
-                    uint16_t r1 = (instr >> 6)& 0x7;
+                    uint16_t r1 = (instr >> 6) & 0x7;
 
-                    if(((instr >> 5) & 0x1)){
+                    if (((instr >> 5) & 0x1)) {
 
+                        //Sign Extend
+                    } else {
+                        uint16_t r2 = instr & 0x7;
+                        registers[r0] = registers[r1] & registers[r2];
                     }
-                    else{
-
-                    }
-
+                    //update Flag
                 }
                     break;
                 case NOT:
+                {
+                    uint16_t r0 = (instr >> 9) & 0x7;
+                    uint16_t r1 = (instr >> 6) & 0x7;
+
+                    registers[r0]= ~registers[r1];
+                    //Update Flag
+                }
                     break;
                 case LD:
+                {
+                    uint16_t r0 = (instr >> 9) & 0x7;
+
+                }
 
                     break;
                 case LDI:
